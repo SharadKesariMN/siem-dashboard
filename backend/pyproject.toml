@@ -1,0 +1,5 @@
+[project]
+name = "siem-dashboard-backend"
+version = "0.1.0"
+description = "AI-Powered SIEM Dashboard backend"
+requires-python = ">=3.12"
