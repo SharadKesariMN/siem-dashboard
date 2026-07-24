@@ -37,6 +37,7 @@ services:
       - .env
     ports:
       - "8000:8000"
+      - "5514:5514/udp"
     volumes:
       - ./backend:/app
     depends_on:
