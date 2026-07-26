@@ -4,6 +4,38 @@ from sqlalchemy.orm import Session
 from app.models.log_event import LogEvent
 from app.ingestion.schemas import LogEventIn
 from app.normalization.engine import normalize_log
+from app.splunk.forwarder import forward_event_to_splunk, is_forwarding_enabled
+
+
+def _event_to_dict(db_event: LogEvent) -> dict:
+    return {
+        "id": str(db_event.id),
+        "timestamp": db_event.timestamp.isoformat() if db_event.timestamp else None,
+        "source_type": db_event.source_type,
+        "source_name": db_event.source_name,
+        "event_type": db_event.event_type,
+        "severity": db_event.severity,
+        "action": db_event.action,
+        "status": db_event.status,
+        "source_ip": db_event.source_ip,
+        "destination_ip": db_event.destination_ip,
+        "source_port": db_event.source_port,
+        "destination_port": db_event.destination_port,
+        "protocol": db_event.protocol,
+        "username": db_event.username,
+        "host": db_event.host,
+        "raw_log": db_event.raw_log,
+        "normalized_message": db_event.normalized_message,
+    }
+
+
+def _maybe_forward(db_event: LogEvent):
+    """Forwards to Splunk if enabled. Never raises - forwarding issues must not affect ingestion."""
+    if is_forwarding_enabled():
+        try:
+            forward_event_to_splunk(_event_to_dict(db_event))
+        except Exception as e:
+            print(f"[ingestion] unexpected forwarding error (ignored): {e}")
 
 
 def save_log_event(db: Session, event: LogEventIn) -> LogEvent:
@@ -31,6 +63,9 @@ def save_log_event(db: Session, event: LogEventIn) -> LogEvent:
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+
+    _maybe_forward(db_event)
+
     return db_event
 
 
@@ -56,4 +91,7 @@ def save_raw_syslog_line(db: Session, raw_line: str, source_ip: str) -> LogEvent
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+
+    _maybe_forward(db_event)
+
     return db_event
