@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import AlertCard from '../components/alerts/AlertCard'
+import OverviewCharts from '../components/charts/OverviewCharts'
 import './AlertsPage.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
@@ -40,6 +41,8 @@ export default function AlertsPage() {
           </p>
         </div>
       </header>
+
+      <OverviewCharts />
 
       {loading && <p className="alerts-empty">Loading alerts…</p>}
 
