@@ -1,27 +1,178 @@
 # AI-Powered SIEM Dashboard
 
-A full-stack Security Information and Event Management (SIEM) platform that
-ingests logs from multiple sources, normalizes them into a common schema,
-runs real-time correlation rules to detect attacks, maps detections to
-MITRE ATT&CK techniques, and generates AI-powered incident summaries.
+A full-stack Security Information and Event Management (SIEM) platform that ingests logs from multiple sources, normalizes them into a common schema, runs real-time correlation rules to detect attacks, maps detections to MITRE ATT&CK techniques, and generates AI-powered incident summaries using the Claude API.
 
-## Status
-🚧 Under active development — built in public, milestone by milestone.
+Built as a portfolio project demonstrating SOC analyst and security engineering skills relevant to the German cybersecurity job market — SIEM operations, threat detection, MITRE ATT&CK, AI/automation, and cloud-native deployment.
+
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Python](https://img.shields.io/badge/backend-Python%20%2F%20FastAPI-blue)
+![React](https://img.shields.io/badge/frontend-React-61DAFB)
+![Docker](https://img.shields.io/badge/deployment-Docker-2496ED)
+
+---
+
+## Overview
+
+Small and mid-sized companies often can't afford commercial SIEM licenses (Splunk Enterprise, Microsoft Sentinel). This project is a lightweight, self-hosted alternative that covers the core SIEM workflow end-to-end:
+
+**Ingest → Normalize → Correlate → Detect → Explain (AI) → Visualize**
+
+It can run entirely standalone, or forward logs to an existing Splunk deployment via HTTP Event Collector (HEC) for hybrid setups.
 
 ## Architecture
-_Diagram coming in later milestone._
+
+\`\`\`
+┌─────────────┐     ┌──────────────┐     ┌────────────────┐
+│  Log Sources │────▶│   Ingestion   │────▶│  Normalization  │
+│ (syslog/API) │     │ (FastAPI/UDP) │     │    Engine       │
+└─────────────┘     └──────────────┘     └────────┬───────┘
+                                                     │
+                                                     ▼
+┌──────────────┐     ┌──────────────┐     ┌────────────────┐
+│   PostgreSQL  │◀────│  Correlation  │◀────│   log_events    │
+│ (log_events,  │     │  Rules Engine │     │     table       │
+│    alerts)    │     │  (every 15s)  │     └────────────────┘
+└──────┬───────┘     └───────┬──────┘
+       │                      │
+       │                      ▼
+       │             ┌────────────────┐     ┌───────────────┐
+       │             │ MITRE ATT&CK    │────▶│  Claude API    │
+       │             │    Tagger       │     │ (AI Summary)   │
+       │             └────────────────┘     └───────────────┘
+       │
+       ▼
+┌──────────────┐     ┌──────────────┐
+│   FastAPI     │────▶│ React Dashboard│
+│  REST API     │     │  (Vite + JS)   │
+└──────────────┘     └──────────────┘
+       │
+       ▼ (optional)
+┌──────────────┐
+│  Splunk HEC   │
+│  Forwarder    │
+└──────────────┘
+\`\`\`
+
+## Features
+
+- **Multi-source ingestion** — syslog (UDP) receiver and REST API endpoint
+- **Log normalization** — regex-based parsers extract structured fields (user, IP, event type) from raw logs
+- **Real-time correlation engine** — detects:
+  - SSH brute force / credential stuffing (MITRE T1110)
+  - Port scanning / network reconnaissance (MITRE T1046)
+  - Privilege escalation via valid accounts (MITRE T1078)
+- **MITRE ATT&CK enrichment** — every alert tagged with technique, tactic, and official reference
+- **AI-generated incident summaries** — Claude API produces plain-English explanations and response recommendations for every alert
+- **Splunk HEC forwarding** — optional, simultaneous forwarding to an existing Splunk instance
+- **Live dashboard** — severity-coded alert feed, charts (severity breakdown, top source IPs, alert timeline), searchable log explorer, and detailed per-alert investigation pages
 
 ## Tech Stack
-- **Backend:** Python, FastAPI
-- **Database:** PostgreSQL
-- **Streaming:** Redis
-- **Frontend:** React, Tailwind CSS
-- **AI:** Claude API
-- **Optional:** Splunk HEC forwarding
-- **Deployment:** Docker Compose → Vercel + Railway/Render
 
-## Setup
-_Instructions coming as modules are built._
+| Layer | Technology |
+|---|---|
+| Backend | Python, FastAPI, SQLAlchemy |
+| Database | PostgreSQL |
+| Real-time streaming | Redis |
+| Frontend | React, Vite, Recharts |
+| AI | Claude API (claude-sonnet-4-6) |
+| Log forwarding | Splunk HTTP Event Collector (HEC) |
+| Deployment | Docker Compose (local) → Vercel (frontend) + Railway/Render (backend) |
+
+## Screenshots
+
+*(Add screenshots here: Alerts page with charts, Alert detail page, Log Explorer)*
+
+## Getting Started
+
+### Prerequisites
+
+- Docker Desktop
+- An [Anthropic API key](https://console.anthropic.com) for the AI summary feature
+
+### Setup
+
+1. Clone the repository:
+   \`\`\`bash
+   git clone https://github.com/SharadKesariMN/siem-dashboard.git
+   cd siem-dashboard
+   \`\`\`
+
+2. Copy the environment template and add your Anthropic API key:
+   \`\`\`bash
+   cp .env.example .env
+   # Edit .env and set ANTHROPIC_API_KEY=sk-ant-...
+   \`\`\`
+
+3. Start the full stack:
+   \`\`\`bash
+   docker compose up --build
+   \`\`\`
+
+4. Open the dashboard:
+   - Frontend: [http://localhost:5173](http://localhost:5173)
+   - Backend API: [http://localhost:8000](http://localhost:8000)
+   - API health check: [http://localhost:8000/health](http://localhost:8000/health)
+
+## Testing the Detection Engine
+
+To see the full pipeline in action — ingestion, normalization, correlation, MITRE tagging, and AI summarization — run the included attack simulation script. It replays a realistic 3-stage intrusion chain (reconnaissance → brute force → privilege escalation) from a single simulated attacker IP:
+
+\`\`\`bash
+./scripts/simulate-attack.sh
+\`\`\`
+
+Within ~20 seconds, three correlated alerts will appear on the dashboard at `localhost:5173`:
+
+| Stage | Technique | Severity |
+|---|---|---|
+| Port scan (11 ports probed) | T1046 - Network Service Discovery | Medium |
+| SSH brute force (7 failed logins) | T1110 - Brute Force | High |
+| Privilege escalation | T1078 - Valid Accounts | Critical |
+
+Each alert includes a Claude-generated plain-English summary and a specific recommended response action.
+
+## Project Structure
+
+\`\`\`
+siem-dashboard/
+├── backend/
+│   ├── app/
+│   │   ├── ingestion/       # syslog + API log ingestion
+│   │   ├── normalization/   # raw log -> structured field extraction
+│   │   ├── correlation/     # detection rules + MITRE reference data
+│   │   ├── ai/              # Claude API integration
+│   │   ├── splunk/          # optional Splunk HEC forwarder
+│   │   ├── models/          # SQLAlchemy models (log_events, alerts)
+│   │   └── routes/          # FastAPI endpoints
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # AlertCard, charts, layout shell
+│   │   ├── pages/           # Alerts, Alert Detail, Log Explorer
+│   │   └── App.jsx
+│   └── Dockerfile
+├── scripts/
+│   └── simulate-attack.sh   # one-command attack chain demo
+├── docker-compose.yml
+└── .env.example
+\`\`\`
+
+## Roadmap
+
+- [x] Log ingestion (syslog + REST API)
+- [x] Normalization engine
+- [x] Correlation rules (brute force, port scan, privilege escalation)
+- [x] MITRE ATT&CK tagging
+- [x] AI-generated incident summaries
+- [x] Splunk HEC forwarding
+- [x] React dashboard with charts and log explorer
+- [ ] Cloud deployment (Vercel + Railway/Render)
+- [ ] Additional detection rules (data exfiltration, impossible travel)
 
 ## License
+
 MIT
+
+## Author
+
+Sharad Kesari — Cybersecurity Masters student, building toward SOC Analyst / Security Engineer roles in the German market.
