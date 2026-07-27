@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import './AlertCard.css'
 
 const SEVERITY_LABELS = {
@@ -21,13 +22,13 @@ export default function AlertCard({ alert }) {
   const severity = alert.severity || 'low'
 
   return (
-    <div className={`alert-card sev-${severity}`}>
+    <Link to={`/alerts/${alert.id}`} className={`alert-card sev-${severity}`}>
       <div className="alert-card-header">
         <span className={`alert-badge sev-${severity}`}>{SEVERITY_LABELS[severity] || severity}</span>
         {alert.mitre_technique && (
-          <a className="alert-mitre-tag" href={alert.mitre_info ? alert.mitre_info.url : undefined} target="_blank" rel="noreferrer">
+          <span className="alert-mitre-tag">
             {alert.mitre_technique} - {alert.mitre_info ? alert.mitre_info.name : ''}
-          </a>
+          </span>
         )}
         <span className="alert-time">{timeAgo(alert.created_at)}</span>
       </div>
@@ -42,6 +43,6 @@ export default function AlertCard({ alert }) {
         <span className="alert-rule">{alert.rule_name}</span>
         <span className={`alert-status status-${alert.status}`}>{alert.status}</span>
       </div>
-    </div>
+    </Link>
   )
 }
