@@ -1,0 +1,103 @@
+.alert-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--text-dim);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: background 0.15s;
+}
+
+.alert-card:hover {
+  background: var(--bg-panel-hover);
+}
+
+.alert-card.sev-critical { border-left-color: var(--sev-critical); }
+.alert-card.sev-high { border-left-color: var(--sev-high); }
+.alert-card.sev-medium { border-left-color: var(--sev-medium); }
+.alert-card.sev-low { border-left-color: var(--sev-low); }
+
+.alert-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.alert-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.alert-badge.sev-critical { background: rgba(229, 72, 77, 0.15); color: var(--sev-critical); }
+.alert-badge.sev-high { background: rgba(240, 136, 62, 0.15); color: var(--sev-high); }
+.alert-badge.sev-medium { background: rgba(232, 197, 71, 0.15); color: var(--sev-medium); }
+.alert-badge.sev-low { background: rgba(91, 141, 239, 0.15); color: var(--sev-low); }
+
+.alert-mitre-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  padding: 3px 8px;
+  border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.alert-mitre-tag:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.alert-time {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.alert-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.alert-ai-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  white-space: pre-line;
+  margin-bottom: 12px;
+}
+
+.alert-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.alert-rule {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.alert-status {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.alert-status.status-open { background: rgba(229, 72, 77, 0.15); color: var(--sev-critical); }
+.alert-status.status-investigating { background: rgba(232, 197, 71, 0.15); color: var(--sev-medium); }
+.alert-status.status-closed { background: rgba(139, 148, 158, 0.15); color: var(--text-dim); }

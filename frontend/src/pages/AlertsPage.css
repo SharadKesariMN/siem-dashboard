@@ -1,0 +1,27 @@
+.alerts-header {
+  margin-bottom: 24px;
+}
+
+.alerts-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.alerts-subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.alerts-empty {
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.alerts-error {
+  color: var(--sev-high);
+}

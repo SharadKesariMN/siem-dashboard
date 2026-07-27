@@ -1,9 +1,22 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import AppShell from './components/layout/AppShell'
+import AlertsPage from './pages/AlertsPage'
+import './styles/global.css'
+
+function LogsPagePlaceholder() {
+  return <div style={{ color: 'var(--text-secondary)' }}>Log Explorer — coming in Step 11</div>
+}
+
 function App() {
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>SIEM Dashboard</h1>
-      <p>Frontend is running. Backend connection coming soon.</p>
-    </div>
+    <BrowserRouter>
+      <AppShell>
+        <Routes>
+          <Route path="/" element={<AlertsPage />} />
+          <Route path="/logs" element={<LogsPagePlaceholder />} />
+        </Routes>
+      </AppShell>
+    </BrowserRouter>
   )
 }
 
