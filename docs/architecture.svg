@@ -1,0 +1,89 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, ui-monospace, monospace">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3B9EFF" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="900" fill="#0B0E14"/>
+
+  <!-- Title -->
+  <text x="600" y="42" text-anchor="middle" fill="#E6E9EF" font-size="22" font-weight="700">AI-Powered SIEM Dashboard — Architecture</text>
+  <text x="600" y="66" text-anchor="middle" fill="#565F73" font-size="13">Ingest → Normalize → Correlate → Detect → Explain (AI) → Visualize</text>
+
+  <!-- Log Sources -->
+  <rect x="40" y="110" width="200" height="80" rx="8" fill="#141821" stroke="#232936" stroke-width="1.5"/>
+  <text x="140" y="140" text-anchor="middle" fill="#5B8DEF" font-size="13" font-weight="600">LOG SOURCES</text>
+  <text x="140" y="160" text-anchor="middle" fill="#8A93A6" font-size="11">Syslog (UDP) / REST API</text>
+  <text x="140" y="176" text-anchor="middle" fill="#8A93A6" font-size="11">File-based parsing</text>
+
+  <!-- Ingestion -->
+  <rect x="320" y="110" width="200" height="80" rx="8" fill="#141821" stroke="#232936" stroke-width="1.5"/>
+  <text x="420" y="140" text-anchor="middle" fill="#5B8DEF" font-size="13" font-weight="600">INGESTION</text>
+  <text x="420" y="160" text-anchor="middle" fill="#8A93A6" font-size="11">FastAPI + UDP receiver</text>
+  <text x="420" y="176" text-anchor="middle" fill="#8A93A6" font-size="11">(background thread)</text>
+
+  <!-- Normalization -->
+  <rect x="600" y="110" width="200" height="80" rx="8" fill="#141821" stroke="#232936" stroke-width="1.5"/>
+  <text x="700" y="140" text-anchor="middle" fill="#5B8DEF" font-size="13" font-weight="600">NORMALIZATION</text>
+  <text x="700" y="160" text-anchor="middle" fill="#8A93A6" font-size="11">Regex field extraction</text>
+  <text x="700" y="176" text-anchor="middle" fill="#8A93A6" font-size="11">Common event schema</text>
+
+  <!-- Splunk (optional) -->
+  <rect x="880" y="110" width="240" height="80" rx="8" fill="#141821" stroke="#F0883E" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="1000" y="140" text-anchor="middle" fill="#F0883E" font-size="13" font-weight="600">SPLUNK HEC (optional)</text>
+  <text x="1000" y="160" text-anchor="middle" fill="#8A93A6" font-size="11">Forwards raw events</text>
+  <text x="1000" y="176" text-anchor="middle" fill="#8A93A6" font-size="11">to existing Splunk instance</text>
+
+  <!-- arrows row 1 -->
+  <path d="M240 150 L318 150" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M520 150 L598 150" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M420 190 L420 220 L880 220 L880 150" stroke="#F0883E" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+  <!-- PostgreSQL -->
+  <rect x="450" y="260" width="300" height="90" rx="8" fill="#141821" stroke="#3B9EFF" stroke-width="1.5"/>
+  <text x="600" y="292" text-anchor="middle" fill="#3B9EFF" font-size="14" font-weight="700">PostgreSQL</text>
+  <text x="600" y="314" text-anchor="middle" fill="#8A93A6" font-size="11">log_events  ·  alerts</text>
+  <text x="600" y="332" text-anchor="middle" fill="#565F73" font-size="10">normalized, queryable, persistent</text>
+
+  <path d="M700 190 L650 258" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Correlation Engine -->
+  <rect x="450" y="400" width="300" height="90" rx="8" fill="#141821" stroke="#E8C547" stroke-width="1.5"/>
+  <text x="600" y="432" text-anchor="middle" fill="#E8C547" font-size="14" font-weight="700">Correlation Engine</text>
+  <text x="600" y="454" text-anchor="middle" fill="#8A93A6" font-size="11">Brute force · Port scan · Priv. esc.</text>
+  <text x="600" y="472" text-anchor="middle" fill="#565F73" font-size="10">background loop, every 15s</text>
+
+  <path d="M600 350 L600 398" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M600 490 L600 350" stroke="#E8C547" stroke-width="1.5" stroke-dasharray="2 3" marker-end="url(#arrow)" opacity="0.6"/>
+  <text x="620" y="375" fill="#565F73" font-size="9">writes alerts</text>
+
+  <!-- MITRE Tagger -->
+  <rect x="140" y="540" width="230" height="90" rx="8" fill="#141821" stroke="#E5484D" stroke-width="1.5"/>
+  <text x="255" y="572" text-anchor="middle" fill="#E5484D" font-size="14" font-weight="700">MITRE ATT&amp;CK Tagger</text>
+  <text x="255" y="594" text-anchor="middle" fill="#8A93A6" font-size="11">T1110 · T1046 · T1078</text>
+  <text x="255" y="612" text-anchor="middle" fill="#565F73" font-size="10">technique + tactic enrichment</text>
+
+  <!-- Claude AI -->
+  <rect x="450" y="540" width="300" height="90" rx="8" fill="#141821" stroke="#E5484D" stroke-width="1.5"/>
+  <text x="600" y="572" text-anchor="middle" fill="#E5484D" font-size="14" font-weight="700">Claude API</text>
+  <text x="600" y="594" text-anchor="middle" fill="#8A93A6" font-size="11">AI incident summary + recommendation</text>
+  <text x="600" y="612" text-anchor="middle" fill="#565F73" font-size="10">claude-sonnet-4-6</text>
+
+  <path d="M450 470 L370 570" stroke="#E5484D" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M600 490 L600 538" stroke="#E5484D" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- FastAPI REST -->
+  <rect x="450" y="680" width="300" height="80" rx="8" fill="#141821" stroke="#232936" stroke-width="1.5"/>
+  <text x="600" y="712" text-anchor="middle" fill="#5B8DEF" font-size="14" font-weight="700">FastAPI REST API</text>
+  <text x="600" y="734" text-anchor="middle" fill="#8A93A6" font-size="11">/api/alerts · /api/logs · /api/stats</text>
+
+  <path d="M600 630 L600 678" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- React Dashboard -->
+  <rect x="450" y="800" width="300" height="80" rx="8" fill="#141821" stroke="#3B9EFF" stroke-width="2"/>
+  <text x="600" y="832" text-anchor="middle" fill="#3B9EFF" font-size="14" font-weight="700">React Dashboard</text>
+  <text x="600" y="854" text-anchor="middle" fill="#8A93A6" font-size="11">Alerts · Log Explorer · Charts</text>
+
+  <path d="M600 760 L600 798" stroke="#3B9EFF" stroke-width="1.5" marker-end="url(#arrow)"/>
+</svg>
