@@ -21,37 +21,7 @@ It can run entirely standalone, or forward logs to an existing Splunk deployment
 
 ## Architecture
 
-\`\`\`
-┌─────────────┐     ┌──────────────┐     ┌────────────────┐
-│  Log Sources │────▶│   Ingestion   │────▶│  Normalization  │
-│ (syslog/API) │     │ (FastAPI/UDP) │     │    Engine       │
-└─────────────┘     └──────────────┘     └────────┬───────┘
-                                                     │
-                                                     ▼
-┌──────────────┐     ┌──────────────┐     ┌────────────────┐
-│   PostgreSQL  │◀────│  Correlation  │◀────│   log_events    │
-│ (log_events,  │     │  Rules Engine │     │     table       │
-│    alerts)    │     │  (every 15s)  │     └────────────────┘
-└──────┬───────┘     └───────┬──────┘
-       │                      │
-       │                      ▼
-       │             ┌────────────────┐     ┌───────────────┐
-       │             │ MITRE ATT&CK    │────▶│  Claude API    │
-       │             │    Tagger       │     │ (AI Summary)   │
-       │             └────────────────┘     └───────────────┘
-       │
-       ▼
-┌──────────────┐     ┌──────────────┐
-│   FastAPI     │────▶│ React Dashboard│
-│  REST API     │     │  (Vite + JS)   │
-└──────────────┘     └──────────────┘
-       │
-       ▼ (optional)
-┌──────────────┐
-│  Splunk HEC   │
-│  Forwarder    │
-└──────────────┘
-\`\`\`
+![Architecture Diagram](docs/architecture.svg)
 
 ## Features
 
