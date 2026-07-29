@@ -6,17 +6,20 @@
 #   3. Privilege Escalation             -> MITRE T1078
 #
 # Usage: ./scripts/simulate-attack.sh
-# Requires: the SIEM Dashboard stack running via `docker compose up`
+# Optional: SIEM_API_URL=https://your-backend.onrender.com ./scripts/simulate-attack.sh
+#
+# All three stages use the REST API (HTTP), so this works identically
+# against a local Docker Compose stack or a cloud deployment - no UDP
+# syslog dependency, which most free-tier cloud hosts don't expose.
 
 set -e
 
 API_URL="${SIEM_API_URL:-http://localhost:8000}"
-SYSLOG_HOST="${SIEM_SYSLOG_HOST:-localhost}"
-SYSLOG_PORT="${SIEM_SYSLOG_PORT:-5514}"
 ATTACKER_IP="192.0.2.200"
 
 echo "=================================================="
 echo " SIEM Dashboard - Simulated Attack Chain"
+echo " Target API: $API_URL"
 echo " Attacker IP: $ATTACKER_IP"
 echo "=================================================="
 
@@ -33,7 +36,9 @@ echo "      Done - 11 ports probed"
 echo ""
 echo "[2/3] Simulating SSH brute force..."
 for i in {1..7}; do
-  echo "<34>$(date '+%b %d %H:%M:%S') target-host sshd[500$i]: Failed password for invalid user admin$i from $ATTACKER_IP port 4000$i ssh2" | nc -u -w1 "$SYSLOG_HOST" "$SYSLOG_PORT"
+  curl -s -X POST "$API_URL/api/ingest/event" \
+    -H "Content-Type: application/json" \
+    -d "{\"source_type\": \"api\", \"event_type\": \"auth_failure\", \"severity\": \"medium\", \"source_ip\": \"$ATTACKER_IP\", \"username\": \"admin$i\", \"host\": \"target-host\", \"raw_log\": \"Failed password for invalid user admin$i from $ATTACKER_IP port 400$i ssh2\"}" > /dev/null
   sleep 1
 done
 echo "      Done - 7 failed login attempts"
@@ -60,7 +65,7 @@ echo "=================================================="
 sleep 20
 
 echo ""
-echo "Open http://localhost:5173 to see 3 correlated alerts:"
+echo "Check your dashboard for 3 correlated alerts:"
 echo "  - Port Scan (T1046)"
 echo "  - SSH Brute Force (T1110)"
 echo "  - Privilege Escalation (T1078)"
