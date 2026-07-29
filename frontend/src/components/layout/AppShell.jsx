@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { clearStoredAuth } from '../../lib/api'
 import './AppShell.css'
 
 const NAV_ITEMS = [
@@ -6,7 +7,12 @@ const NAV_ITEMS = [
   { to: '/logs', label: 'Log Explorer', icon: '▤' },
 ]
 
-export default function AppShell({ children }) {
+export default function AppShell({ children, onLogout }) {
+  function handleLogout() {
+    clearStoredAuth()
+    onLogout()
+  }
+
   return (
     <div className="shell">
       <aside className="shell-sidebar">
@@ -27,6 +33,9 @@ export default function AppShell({ children }) {
             </NavLink>
           ))}
         </nav>
+        <button className="shell-logout" onClick={handleLogout}>
+          Log out
+        </button>
         <div className="shell-status">
           <span className="shell-live-dot" />
           Live monitoring

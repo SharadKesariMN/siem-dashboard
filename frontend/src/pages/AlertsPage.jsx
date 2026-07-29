@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import AlertCard from '../components/alerts/AlertCard'
 import OverviewCharts from '../components/charts/OverviewCharts'
+import { apiFetch } from '../lib/api'
 import './AlertsPage.css'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 const POLL_INTERVAL_MS = 10000
 
 export default function AlertsPage() {
@@ -13,9 +13,7 @@ export default function AlertsPage() {
 
   async function fetchAlerts() {
     try {
-      const res = await fetch(`${API_BASE}/api/alerts`)
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-      const data = await res.json()
+      const data = await apiFetch('/api/alerts')
       setAlerts(data)
       setError(null)
     } catch (err) {

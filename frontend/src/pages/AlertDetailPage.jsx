@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { apiFetch } from '../lib/api'
 import './AlertDetailPage.css'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 const SEVERITY_LABELS = {
   critical: 'Critical',
@@ -28,9 +27,7 @@ export default function AlertDetailPage() {
   useEffect(() => {
     async function fetchAlert() {
       try {
-        const res = await fetch(`${API_BASE}/api/alerts/${id}`)
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-        const data = await res.json()
+        const data = await apiFetch(`/api/alerts/${id}`)
         if (data.error) throw new Error(data.error)
         setAlert(data)
         setError(null)

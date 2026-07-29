@@ -67,7 +67,6 @@
 }
 
 .shell-status {
-  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -107,4 +106,21 @@
   .shell-main {
     padding: 20px;
   }
+}
+
+.shell-logout {
+  margin-top: auto;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.shell-logout:hover {
+  color: var(--sev-critical);
+  border-color: var(--sev-critical);
 }

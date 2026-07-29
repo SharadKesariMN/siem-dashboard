@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
+import { apiFetch } from '../lib/api'
 import './LogsPage.css'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 const SEVERITY_OPTIONS = ['critical', 'high', 'medium', 'low', 'info']
 const SOURCE_TYPE_OPTIONS = ['syslog', 'api', 'file']
@@ -30,9 +29,7 @@ export default function LogsPage() {
       if (severity) params.set('severity', severity)
       if (sourceType) params.set('source_type', sourceType)
 
-      const res = await fetch(`${API_BASE}/api/logs?${params.toString()}`)
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-      const data = await res.json()
+      const data = await apiFetch(`/api/logs?${params.toString()}`)
       setLogs(data)
       setError(null)
     } catch (err) {

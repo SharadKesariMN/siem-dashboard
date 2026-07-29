@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { apiFetch } from '../../lib/api'
 import './OverviewCharts.css'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 const SEVERITY_COLORS = {
   critical: '#E5484D',
@@ -31,14 +30,14 @@ export default function OverviewCharts() {
   useEffect(() => {
     async function loadStats() {
       try {
-        const [sevRes, sourcesRes, timelineRes] = await Promise.all([
-          fetch(`${API_BASE}/api/stats/severity-breakdown`),
-          fetch(`${API_BASE}/api/stats/top-sources`),
-          fetch(`${API_BASE}/api/stats/timeline`),
+        const [sev, sources, tl] = await Promise.all([
+          apiFetch('/api/stats/severity-breakdown'),
+          apiFetch('/api/stats/top-sources'),
+          apiFetch('/api/stats/timeline'),
         ])
-        setSeverityData(await sevRes.json())
-        setTopSources(await sourcesRes.json())
-        setTimeline(await timelineRes.json())
+        setSeverityData(Array.isArray(sev) ? sev : [])
+        setTopSources(Array.isArray(sources) ? sources : [])
+        setTimeline(Array.isArray(tl) ? tl : [])
       } catch (err) {
         console.error('Failed to load stats', err)
       }

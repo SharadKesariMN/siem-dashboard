@@ -78,7 +78,9 @@ It can run entirely standalone, or forward logs to an existing Splunk deployment
    docker compose up --build
    \`\`\`
 
-4. Open the dashboard:
+4. Log in to the dashboard using the credentials set in `.env` (`DASHBOARD_USERNAME` / `DASHBOARD_PASSWORD`, defaults to `admin` / `changeme` — change these before any real deployment).
+
+5. Open the dashboard:
    - Frontend: [http://localhost:5173](http://localhost:5173)
    - Backend API: [http://localhost:8000](http://localhost:8000)
    - API health check: [http://localhost:8000/health](http://localhost:8000/health)
@@ -137,6 +139,8 @@ siem-dashboard/
 - [x] Splunk HEC forwarding
 - [x] React dashboard with charts and log explorer
 - [ ] Cloud deployment (Vercel + Railway/Render)
+- [ ] Multi-user authentication with role-based access (JWT, user management)
+- [ ] Configurable data retention policies for logs and alerts
 - [ ] Additional detection rules (data exfiltration, impossible travel)
 
 ## License
