@@ -50,7 +50,20 @@ It can run entirely standalone, or forward logs to an existing Splunk deployment
 
 ## Screenshots
 
-*(Add screenshots here: Alerts page with charts, Alert detail page, Log Explorer)*
+### Alerts Dashboard
+Live alert feed with severity breakdown, top source IPs, and alert volume charts.
+
+![Alerts Overview](docs/screenshots/alerts-overview.png)
+
+### Alert Detail
+Full MITRE ATT&CK context, AI-generated analysis, and the raw log events behind each alert.
+
+![Alert Detail](docs/screenshots/alert-detail.png)
+
+### Log Explorer
+Searchable, filterable view of every ingested log event.
+
+![Log Explorer](docs/screenshots/log-explorer.png)
 
 ## Getting Started
 
