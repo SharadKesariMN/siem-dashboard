@@ -103,6 +103,19 @@ Within ~20 seconds, three correlated alerts will appear on the dashboard at `loc
 
 Each alert includes a Claude-generated plain-English summary and a specific recommended response action.
 
+To reset the demo data (clear all alerts and logs before a fresh run):
+
+```bash
+DASHBOARD_USERNAME=<your-username> DASHBOARD_PASSWORD=<your-password> ./scripts/reset-demo.sh
+```
+
+Both scripts accept an optional `SIEM_API_URL` to target a deployed instance instead of localhost:
+
+```bash
+SIEM_API_URL=https://your-backend.onrender.com DASHBOARD_USERNAME=... DASHBOARD_PASSWORD=... ./scripts/reset-demo.sh
+SIEM_API_URL=https://your-backend.onrender.com ./scripts/simulate-attack.sh
+```
+
 ## Project Structure
 
 \`\`\`
