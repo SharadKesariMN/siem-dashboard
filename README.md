@@ -131,7 +131,7 @@ SIEM_API_URL=https://your-backend.onrender.com ./scripts/simulate-attack.sh
 
 ## Project Structure
 
-\`\`\`
+```
 siem-dashboard/
 ├── backend/
 │   ├── app/
@@ -153,7 +153,7 @@ siem-dashboard/
 │   └── simulate-attack.sh   # one-command attack chain demo
 ├── docker-compose.yml
 └── .env.example
-\`\`\`
+```
 
 ## Roadmap
 
