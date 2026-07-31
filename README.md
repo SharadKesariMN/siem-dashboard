@@ -102,9 +102,9 @@ Searchable, filterable view of every ingested log event.
 
 To see the full pipeline in action — ingestion, normalization, correlation, MITRE tagging, and AI summarization — run the included attack simulation script. It replays a realistic 3-stage intrusion chain (reconnaissance → brute force → privilege escalation) from a single simulated attacker IP:
 
-\`\`\`bash
+```bash
 ./scripts/simulate-attack.sh
-\`\`\`
+```
 
 Within ~20 seconds, three correlated alerts will appear on the dashboard at `localhost:5173`:
 
